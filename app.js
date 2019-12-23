@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 let mqtt_client_google = require('./mqtt_client_google')
+let mqtt_client_local = require('./mqtt_client_local')
 const Sequelize = require('sequelize');
 const DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/onder_between';
 const database = new Sequelize(DATABASE_URL);
@@ -53,7 +54,7 @@ const mqtt = new mqtt_client_google.ClientMQTT()
 mqtt.add_handler(handler)
 mqtt.start()
 
-const mqttLocal = new mqtt_client_google.ClientMQTTLocal()
+const mqttLocal = new mqtt_client_local.ClientMQTTLocal()
 mqttLocal.start()
 
 // catch 404 and forward to error handler

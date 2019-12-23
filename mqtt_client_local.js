@@ -28,7 +28,7 @@ class ClientMQTTLocal {
 
 
   publish(topic_inner, value) {
-    console.log("publish is hooked " + value)
+    console.log("publish is hooked from mqtt local" + value)
     let topic = topic_inner
     let payload = value
     this.Client.publish(topic, payload)
@@ -36,32 +36,12 @@ class ClientMQTTLocal {
 
   connected() {
     this.started = 1
-    console.log("Connected to the broker!")
-    //TODO change to topic, # for
-    this.Client.subscribe("/testbed/+/finance")
-    this.Client.subscribe("/testbed/emeter1/power")
-    this.Client.subscribe("/testbed/emeter2/power")
-    this.Client.subscribe("/testbed/emeter3/power")
-    this.Client.subscribe("/testbed/emeter4/power")
-    this.Client.subscribe("/testbed/+/relay/+/status")
-    this.Client.subscribe("/testbed/+/ext_battery/power")
-    this.Client.subscribe("/testbed/+/load/+/status")
-    this.Client.subscribe("/testbed/+/+/measure")
-    this.Client.subscribe("/testbed/relay/+/mode")
-    this.Client.subscribe("/testbed/relay/+/status")
-    this.Client.subscribe("/testbed/+/+/power")
-    //this.Client.subscribe("/testbed/+/contracts/+/init")
-    this.Client.subscribe("/testbed/amigo/set_price")
-    this.Client.subscribe("/testbed/erouter/setpower_out")
-    this.Client.subscribe("/testbed/+/gen/parameter0")
-    //this.Client.subscribe("/testbed/+/known_agents")
-
-    this.Client.on('message', this.topic_handler.bind(this))
+    console.log("Connected to the broker! LOCAL")
   }
 
 
   start() {
-    console.log("Starting MQTT client")
+    console.log("Starting MQTT client LOCAL")
     this.Client = mqtt.connect(this.options)
     this.Client.on('connect', this.connected.bind(this))
   }
@@ -73,5 +53,5 @@ class ClientMQTTLocal {
 
 
 module.exports = {
-  ClientMQTT
+  ClientMQTTLocal
 }

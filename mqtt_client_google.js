@@ -29,6 +29,7 @@ class ClientMQTT {
   topic_handler(topic, message) {
   	try {
       console.log("Received a new message from %o - %o", topic.toString(), message.toString());
+      if(!(topic.split('/')[2]=="known_agents" || topic.split('/')[2]=="contracts")) {
       // var msg_type = topic.split('/')[3]
       // let json_msg = JSON.parse(message)
       // var power_value = {
@@ -42,6 +43,12 @@ class ClientMQTT {
       //       value: json_msg.value
       //     }
       this.handler(topic.toString(), message.toString())
+      } else {
+          console.log("publish is hooked already" + value)
+          let topic = topic
+          let payload = message
+          this.Client.publish(topic, payload)
+      }
     } catch(e) {
       console.log(e);
     }
@@ -70,11 +77,13 @@ class ClientMQTT {
     this.Client.subscribe("/testbed/relay/+/mode")
     this.Client.subscribe("/testbed/relay/+/status")
     this.Client.subscribe("/testbed/+/+/power")
-    //this.Client.subscribe("/testbed/+/contracts/+/init")
     this.Client.subscribe("/testbed/amigo/set_price")
     this.Client.subscribe("/testbed/erouter/setpower_out")
     this.Client.subscribe("/testbed/+/gen/parameter0")
-    //this.Client.subscribe("/testbed/+/known_agents")
+
+
+    this.Client.subscribe("/testbed/+/contracts/+/init")
+    this.Client.subscribe("/testbed/+/known_agents")
 
     this.Client.on('message', this.topic_handler.bind(this))
   }
