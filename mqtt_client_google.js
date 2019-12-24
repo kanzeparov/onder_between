@@ -14,10 +14,10 @@ class ClientMQTT {
   constructor() {
     this.options = {
       port: 1883,
-      host: "35.223.170.49",
+      host: "192.168.0.10",
       clientId: makeid(20),
-      username: "user",
-     password: "ZW8W3dQa",
+      //username: "user",
+     //password: "ZW8W3dQa",
       keepalive: 60,
       reconnectPeriod: 1000,
       rejectUnauthorized: true,
@@ -29,7 +29,6 @@ class ClientMQTT {
   topic_handler(topic, message) {
   	try {
       console.log("Received a new message from %o - %o", topic.toString(), message.toString());
-      if(!(topic.split('/')[2]=="known_agents" || topic.split('/')[2]=="contracts")) {
       // var msg_type = topic.split('/')[3]
       // let json_msg = JSON.parse(message)
       // var power_value = {
@@ -43,12 +42,7 @@ class ClientMQTT {
       //       value: json_msg.value
       //     }
       this.handler(topic.toString(), message.toString())
-      } else {
-          console.log("publish is hooked already" + value)
-          let topic = topic
-          let payload = message
-          this.Client.publish(topic, payload)
-      }
+
     } catch(e) {
       console.log(e);
     }

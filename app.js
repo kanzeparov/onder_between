@@ -78,7 +78,11 @@ async function handler(type, mes) {
   var date = new Date();
   var timestamp = date.getTime();
   let topic = type
-  var value_from_bd = '';
+  var value_from_bd = undefined;
+  console.log("topic.split('/')[2] ", topic.split('/')[2])
+  if(!(topic.split('/')[3]=="known_agents" || topic.split('/')[3]=="contracts")) {
+
+
   const value_from_topic = JSON.parse(mes).value;
   console.log("value_from_topic " + value_from_topic);
 
@@ -89,12 +93,13 @@ async function handler(type, mes) {
       }
     });
 
-      console.log("topics value " + topics.value);
       const json_msg = JSON.parse(topics.value)
+      console.log("json_msg " + json_msg)
       value_from_bd = json_msg.value
       console.log("value_from_bd first catch " + value_from_bd);
 
   } catch (ex) {
+    Topics.upsert({ topic: type, value: mes});
     console.log(ex.toString())
   }
 
@@ -117,12 +122,15 @@ async function handler(type, mes) {
           console.log(err);
       });
       Topics.upsert({ topic: type, value: mes});
-      mqttLocal.publish(type+"ololololo", mes)
+      mqttLocal.publish(type, mes)
     }
 
   } catch (ex) {
     console.log(ex.toString())
   }
+} else {
+  mqttLocal.publish(type, mes)
+}
 }
 
 app.listen(process.env.PORT || 3006, function() {
